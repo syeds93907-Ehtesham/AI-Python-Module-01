@@ -1,0 +1,417 @@
+# 1. Machine Learning (ML)
+
+## Definition
+
+Machine Learning is a branch of Artificial Intelligence (AI) that allows
+computers to learn patterns from data and make predictions or decisions
+without being explicitly programmed for every situation.
+
+**Simple meaning:** We give a computer examples (data), it learns
+patterns from them, and then it uses those patterns to make a
+prediction.
+
+## How Machine Learning works
+
+1.  Collect data.
+2.  Clean and prepare the data.
+3.  Choose a machine-learning algorithm.
+4.  Train the model using example data.
+5.  Test the model using data it has not seen before.
+6.  Use the model to make predictions.
+
+## Main types of Machine Learning
+
+### A. Supervised Learning
+
+The model learns from labelled examples. Each example has input data and
+the correct answer.
+
+**Examples:** Predicting house prices, detecting spam emails, predicting
+whether a student may pass based on study data.
+
+### B. Unsupervised Learning
+
+The model finds patterns or groups in data that does not have labelled
+answers.
+
+**Examples:** Grouping customers by shopping behaviour, grouping similar
+news articles.
+
+### C. Reinforcement Learning
+
+An agent learns by taking actions and receiving rewards or penalties.
+
+**Examples:** Training a game-playing agent or a robot to move.
+
+## Machine Learning coding example: Predicting an Iris flower type
+
+This example trains a small ML model using the Iris dataset. The dataset
+contains flower measurements and the correct flower species.
+
+**Run this in Google Colab.** Scikit-learn is commonly available in
+Colab. If it is missing, run `!pip install scikit-learn` in a separate
+cell first.
+
+``` python
+# Import the dataset and tools
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+# Load the Iris flower dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split the data: some for learning, some for testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create and train the machine-learning model
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Test the model
+predictions = model.predict(X_test)
+print("Model accuracy:", accuracy_score(y_test, predictions))
+
+# Predict the type of a new flower
+new_flower = [[5.1, 3.5, 1.4, 0.2]]
+result = model.predict(new_flower)
+
+print("Predicted flower:", iris.target_names[result[0]])
+```
+
+### Explanation of important terms
+
+-   `X`: the input measurements.
+-   `y`: the correct flower labels.
+-   `train_test_split`: separates examples for training and testing.
+-   `fit()`: teaches the model using training data.
+-   `predict()`: asks the trained model to make a prediction.
+-   `accuracy_score()`: checks how many test predictions were correct.
+
+**Note:** The accuracy can vary if the dataset split or model settings
+change. This is a learning example, not a production
+flower-identification system.
+
+------------------------------------------------------------------------
+
+# 2. Deep Learning (DL)
+
+## Definition
+
+Deep Learning is a specialised part of Machine Learning that uses
+artificial neural networks with multiple layers to learn patterns from
+large or complex data.
+
+**Simple meaning:** Deep Learning is inspired by the way connected
+neurons work in the human brain. A computer model uses layers of
+connected mathematical units to learn patterns.
+
+## What is an Artificial Neural Network?
+
+An Artificial Neural Network (ANN) is a computer model made of connected
+units called neurons. These units are arranged in layers.
+
+Main layers: 1. **Input layer:** Receives the data. 2. **Hidden
+layers:** Learn patterns from the data. 3. **Output layer:** Produces
+the final result.
+
+## Machine Learning vs Deep Learning
+
+  -----------------------------------------------------------------------
+  Machine Learning                    Deep Learning
+  ----------------------------------- -----------------------------------
+  Includes many types of algorithms.  Uses multi-layer neural networks.
+
+  Can work well with smaller          Often benefits from large datasets.
+  datasets.                           
+
+  People may need to select useful    Can learn useful features
+  features.                           automatically from complex data.
+
+  Often needs less computing power.   Can need more computing power and
+                                      training time.
+  -----------------------------------------------------------------------
+
+## Deep Learning coding example: Handwritten digit recognition
+
+This example uses TensorFlow/Keras to train a small neural network on
+the MNIST dataset. MNIST contains images of handwritten digits from 0 to
+9.
+
+**Run this in Google Colab.** Training may take a few minutes.
+
+``` python
+# Import TensorFlow
+import tensorflow as tf
+from tensorflow.keras import layers, models
+
+# Load the MNIST handwritten digit dataset
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+
+# Scale pixel values from 0-255 to 0-1
+x_train = x_train / 255.0
+x_test = x_test / 255.0
+
+# Build a simple neural network
+model = models.Sequential([
+    layers.Flatten(input_shape=(28, 28)),
+    layers.Dense(128, activation="relu"),
+    layers.Dense(64, activation="relu"),
+    layers.Dense(10, activation="softmax")
+])
+
+# Prepare the model for training
+model.compile(
+    optimizer="adam",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+# Train the model
+model.fit(x_train, y_train, epochs=3)
+
+# Evaluate it on test images
+test_loss, test_accuracy = model.evaluate(x_test, y_test)
+print("Test accuracy:", test_accuracy)
+
+# Predict the digit in the first test image
+prediction = model.predict(x_test[:1])
+print("Predicted digit:", prediction.argmax())
+print("Actual digit:", y_test[0])
+```
+
+### Explanation of important terms
+
+-   `MNIST`: a dataset of handwritten digit pictures.
+-   `Flatten`: changes each 28 Ã— 28 image into a one-dimensional list of
+    pixel values.
+-   `Dense`: a layer in which neurons connect to the previous layer.
+-   `relu`: an activation function used in hidden layers.
+-   `softmax`: converts the output into scores for the 10 digit classes.
+-   `epochs=3`: the model goes through the training dataset three times.
+-   `evaluate()`: checks model performance on test data.
+
+**Note:** This is a beginner demonstration. The model is trained on
+MNIST digits; it is not a general image-recognition system.
+
+------------------------------------------------------------------------
+
+# 3. Real-World Applications of AI
+
+Artificial Intelligence is used in many areas of everyday life.
+
+## Common applications
+
+  -----------------------------------------------------------------------
+  Area                    AI application          Example
+  ----------------------- ----------------------- -----------------------
+  Healthcare              Helps analyse medical   Highlighting possible
+                          images and support      abnormalities in an
+                          clinical decisions.     X-ray for a
+                                                  professional to review.
+
+  Education               Personalised learning   Learning apps that
+                          and study assistance.   recommend practice
+                                                  questions.
+
+  Banking                 Fraud detection and     Flagging unusual card
+                          risk analysis.          transactions for
+                                                  review.
+
+  Transport               Route planning and      Maps estimating traffic
+                          driver-assistance       and suggesting routes.
+                          features.               
+
+  Shopping                Recommendation systems. Suggesting products
+                                                  based on previous
+                                                  activity.
+
+  Communication           Spam filtering and      Email spam detection
+                          translation.            and language
+                                                  translation.
+
+  Agriculture             Crop and plant          Analysing images to
+                          monitoring.             identify possible plant
+                                                  diseases.
+
+  Customer service        Chatbots and virtual    Answering common
+                          assistants.             customer questions.
+  -----------------------------------------------------------------------
+
+AI tools support people; they do not guarantee that every prediction or
+answer is correct. Important decisions should be checked by qualified
+people.
+
+## Coding example: A simple spam-message classifier
+
+This beginner example trains a small Machine Learning text classifier.
+It learns from sample messages labelled as `spam` or `not spam`.
+
+``` python
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import make_pipeline
+
+# Small example dataset
+messages = [
+    "win a free prize now",
+    "claim your cash reward",
+    "limited offer click now",
+    "hello how are you",
+    "are we meeting today",
+    "please send me the class notes"
+]
+
+labels = [
+    "spam",
+    "spam",
+    "spam",
+    "not spam",
+    "not spam",
+    "not spam"
+]
+
+# Create a text-processing and classification pipeline
+model = make_pipeline(CountVectorizer(), MultinomialNB())
+
+# Train the classifier
+model.fit(messages, labels)
+
+# Test it with a new message
+new_message = ["claim your free reward now"]
+prediction = model.predict(new_message)
+
+print("Message:", new_message[0])
+print("Prediction:", prediction[0])
+```
+
+### How this example works
+
+1.  `messages` stores example text messages.
+2.  `labels` stores the correct category for each message.
+3.  `CountVectorizer()` converts text into numerical word counts.
+4.  `MultinomialNB()` is a classification algorithm.
+5.  `fit()` trains the model.
+6.  `predict()` predicts the category of a new message.
+
+**Important:** This tiny dataset is only for learning. A real spam
+filter needs a much larger, varied dataset and careful testing. This
+example demonstrates Machine Learning used in a real-world area; it is
+not a complete commercial spam-filtering system.
+
+------------------------------------------------------------------------
+
+# 4. Difference Between AI, ML, and DL
+
+-   **Artificial Intelligence (AI):** The broad field of making
+    computers perform tasks that normally require human intelligence.
+-   **Machine Learning (ML):** A part of AI in which systems learn
+    patterns from data.
+-   **Deep Learning (DL):** A part of ML that uses neural networks with
+    multiple layers.
+
+Remember this relationship:
+
+**AI â†’ Machine Learning â†’ Deep Learning**
+
+Deep Learning is inside Machine Learning, and Machine Learning is inside
+Artificial Intelligence.
+
+------------------------------------------------------------------------
+
+# 5. Important Terms to Remember
+
+  -----------------------------------------------------------------------
+  Term                                Simple meaning
+  ----------------------------------- -----------------------------------
+  Dataset                             A collection of data used for
+                                      learning or testing.
+
+  Feature                             An input property used by a model.
+
+  Label                               The correct answer associated with
+                                      an example.
+
+  Model                               The learned system that makes
+                                      predictions.
+
+  Training                            The process of teaching a model
+                                      using data.
+
+  Testing                             Checking a model using data not
+                                      used for training.
+
+  Prediction                          The model's output for new input.
+
+  Neural network                      A model made of connected layers of
+                                      artificial neurons.
+
+  Epoch                               One complete pass through the
+                                      training dataset.
+
+  Accuracy                            The proportion of predictions that
+                                      are correct.
+  -----------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# 6. Quick Revision Questions
+
+1.  What is Machine Learning?
+2.  Name the three main types of Machine Learning.
+3.  What is supervised learning?
+4.  What is Deep Learning?
+5.  What are the input, hidden, and output layers?
+6.  Write two differences between Machine Learning and Deep Learning.
+7.  Give four real-world applications of AI.
+8.  What is a dataset?
+9.  What is the difference between training and testing?
+10. What is the purpose of `predict()` in Scikit-learn?
+
+## Short answers
+
+1.  Machine Learning allows computers to learn patterns from data and
+    make predictions.
+2.  Supervised learning, unsupervised learning, and reinforcement
+    learning.
+3.  Learning from examples that contain input data and correct labels.
+4.  A part of Machine Learning that uses neural networks with multiple
+    layers.
+5.  Input receives data, hidden layers learn patterns, and output
+    produces a result.
+6.  ML includes many algorithms; DL uses multi-layer neural networks. DL
+    often needs more data and computing power.
+7.  Healthcare, education, banking, transport, shopping, communication,
+    agriculture, and customer service.
+8.  A collection of data.
+9.  Training teaches the model; testing checks how it performs on unseen
+    data.
+10. It makes a prediction using the trained model.
+
+------------------------------------------------------------------------
+
+# 7. What I Learned
+
+In this module, I learned the basic meaning of Machine Learning and its
+three main types. I also learned how Deep Learning uses neural networks
+with multiple layers. I explored real-world AI applications in
+healthcare, education, banking, transport, shopping, and communication.
+I practised beginner coding examples using Scikit-learn and TensorFlow
+in Google Colab.
+
+## Practice checklist
+
+-   [ ] Read the Machine Learning definition and types.
+-   [ ] Run the Iris Machine Learning example in Google Colab.
+-   [ ] Read the Deep Learning and neural-network explanation.
+-   [ ] Run the MNIST Deep Learning example in Google Colab.
+-   [ ] Read the real-world AI applications.
+-   [ ] Run the spam-message classifier example.
+-   [ ] Answer the revision questions in my own words.
+
+**End of Module 01 topic notes.**
